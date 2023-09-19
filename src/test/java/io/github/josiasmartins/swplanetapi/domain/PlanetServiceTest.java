@@ -1,6 +1,9 @@
 package io.github.josiasmartins.swplanetapi.domain;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 import io.github.josiasmartins.swplanetapi.common.PlanetConstants;
 
@@ -48,6 +53,26 @@ public class PlanetServiceTest {
         Assertions.assertThatThrownBy(
             () -> planetService.create(PlanetConstants.INVALID_PLANET))
             .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void getPlanet_ByExistingId_ReturnsPlanet() {
+        when(planetRepository.findById(anyLong())).thenReturn(Optional.of(PlanetConstants.PLANET));
+
+        Optional<Planet> sut = planetService.getById(1L);
+
+        Assertions.assertThat(sut).isNotEmpty();
+        Assertions.assertThat(sut.get()).isEqualTo(PlanetConstants.PLANET);
+
+    }   
+
+    @Test
+    public void getPlanet_ByUnexistingId_ReturnsEmpty() {
+        when(planetRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Optional<Planet> sut = planetService.getById(1L);
+
+        Assertions.assertThat(sut).isEmpty();
     }
 
 }
