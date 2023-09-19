@@ -1,9 +1,13 @@
 package io.github.josiasmartins.swplanetapi.domain;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.swing.text.html.Option;
@@ -17,8 +21,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Example;
 
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 import io.github.josiasmartins.swplanetapi.common.PlanetConstants;
 
@@ -96,6 +102,40 @@ public class PlanetServiceTest {
         Optional<Planet> sut = planetService.getByName(name);
 
         Assertions.assertThat(sut).isEmpty();   
+    }
+
+    @Test
+    public void listPlanets_ReturnsAllPlanets() {
+        final String climate = PlanetConstants.PLANET.getClimate();
+        final String terrain = PlanetConstants.PLANET.getTerrain();
+        // TODO: implements
+        List<Planet> planets = new ArrayList<>() {
+            {
+                add(PlanetConstants.PLANET);
+            }
+        };
+        Example<Planet> query = QueryBuilder.makeQuery(new Planet(climate, terrain));
+
+        when(planetRepository.findAll(query)).thenReturn(planets);
+
+        List<Planet> sut = planetService.list(terrain, climate);
+
+        Assertions.assertThat(sut).isNotEmpty();
+        Assertions.assertThat(sut).hasSize(1);
+        Assertions.assertThat(sut.get(0)).isEqualTo(PlanetConstants.PLANET);
+    }
+
+    @Test
+    public void listPlanets_ReturnsANoPlanets() {
+        // TODO: implements
+        final String climate = PlanetConstants.PLANET.getClimate();
+        final String terrain = PlanetConstants.PLANET.getTerrain();
+
+        when(planetRepository.findAll(any())).thenReturn(Collections.emptyList());
+
+        List<Planet> sut = planetService.list(terrain, climate);
+
+        Assertions.assertThat(sut).isEmpty();
     }
 
 }
