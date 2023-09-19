@@ -1,5 +1,6 @@
 package io.github.josiasmartins.swplanetapi.web;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,14 @@ public class PlanetController {
         // return ResponseEntity.status(HttpStatus.OK).body(
         //     planetService.getById(id)
         // );
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Planet> getByName(@PathVariable("name") String name) {
+        // System.out.println(planetService.getByName(name).get() + " ibg con");
+        return planetService.getByName(name)
+            .map(planet -> ResponseEntity.ok(planet))
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }

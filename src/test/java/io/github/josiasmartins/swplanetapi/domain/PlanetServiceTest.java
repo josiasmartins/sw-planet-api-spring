@@ -1,9 +1,12 @@
 package io.github.josiasmartins.swplanetapi.domain;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+
+import javax.swing.text.html.Option;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -73,6 +76,26 @@ public class PlanetServiceTest {
         Optional<Planet> sut = planetService.getById(1L);
 
         Assertions.assertThat(sut).isEmpty();
+    }
+
+    @Test
+    public void getPlanet_ByExistingName_ReturnsPlanet() {
+        when(planetRepository.findByName(PlanetConstants.PLANET.getName())).thenReturn(Optional.of(PlanetConstants.PLANET));
+
+        Optional<Planet> sut = planetService.getByName(PlanetConstants.PLANET.getName());
+
+        Assertions.assertThat(sut).isNotEmpty();
+        Assertions.assertThat(sut.get()).isEqualTo(PlanetConstants.PLANET);
+    }
+
+    @Test
+    public void getPlanet_ByUnexistingName_ReturnsEmpty() {
+        final String name = "Unexisting name";
+        when(planetRepository.findByName(name)).thenReturn(Optional.empty());
+
+        Optional<Planet> sut = planetService.getByName(name);
+
+        Assertions.assertThat(sut).isEmpty();   
     }
 
 }

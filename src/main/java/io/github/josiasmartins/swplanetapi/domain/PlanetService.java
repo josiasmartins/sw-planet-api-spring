@@ -21,6 +21,11 @@ public class PlanetService {
         return planetRepository.findById(id);
     }
 
+    public Optional<Planet> getByName(String name) {
+        // System.out.println(planetRepository.findByName(name).get() + " ibg");
+        return planetRepository.findByName(name);
+    }
+
     // public Planet getById(Long id) {
     //     return planetRepository.findById(id).get();
     // }
