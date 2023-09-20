@@ -51,8 +51,6 @@ public class PlanetRepositoryTest {
         testEntityManager.detach(planet); // detach: permite pegar o novo planet e não so atulizar
         planet.setId(null);
 
-        planetRepository.save(PLANET);
-
         assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
     }
 
