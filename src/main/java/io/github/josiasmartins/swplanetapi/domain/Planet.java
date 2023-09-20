@@ -21,7 +21,7 @@ public class Planet {
     private Long id;
 
     @NotEmpty
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true) // unique: não pode existir outro nome igual
     private String name;
 
     @NotEmpty
