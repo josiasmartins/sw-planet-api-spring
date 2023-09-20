@@ -1,6 +1,7 @@
 package io.github.josiasmartins.swplanetapi.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.isNotNull;
 
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,15 @@ public class PlanetRepositoryTest {
         assertThat(sut.getName()).isEqualTo(PLANET.getName());
         assertThat(sut.getClimate()).isEqualTo(PLANET.getClimate());
         assertThat(sut.getTerrain()).isEqualTo(PLANET.getTerrain());
+    }
+
+    @Test
+    public void createPlanet_WithInvalidData_ThrowsException() {
+        Planet emptyPlanet = new Planet();
+        Planet invalidPlanet = new Planet("", "", "");
+
+        assertThatThrownBy(() -> planetRepository.save(emptyPlanet)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> planetRepository.save(invalidPlanet)).isInstanceOf(RuntimeException.class);
     }
 
 }
