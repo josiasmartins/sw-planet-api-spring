@@ -3,6 +3,7 @@ package io.github.josiasmartins.swplanetapi.domain;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Example;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
@@ -136,6 +139,22 @@ public class PlanetServiceTest {
         List<Planet> sut = planetService.list(terrain, climate);
 
         Assertions.assertThat(sut).isEmpty();
+    }
+
+    @Test
+    public void removePlanet_WithExistingId_DoesNotThrowAnyException() {
+        // TODO: implements
+        //  Assertions.assertThatCode: verifica se não lança nenhuma exceção
+        Assertions.assertThatCode(() -> planetService.deleteById(1L)).doesNotThrowAnyException();
+    }
+
+    @Test
+    public void removePlanet_WithUnexistingId_ThrowAnyException() {
+        // TODO: implements
+        // doThrow(new RuntimeException()): lanca exceções
+        doThrow(new RuntimeException()).when(planetRepository).deleteById(99L);
+
+        Assertions.assertThatThrownBy(() -> planetService.deleteById(99L)).isInstanceOf(RuntimeException.class);
     }
 
 }
