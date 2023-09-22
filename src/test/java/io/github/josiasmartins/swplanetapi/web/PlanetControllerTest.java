@@ -20,7 +20,7 @@ import io.github.josiasmartins.swplanetapi.domain.PlanetService;
 import static io.github.josiasmartins.swplanetapi.common.PlanetConstants.PLANET;
 
 @WebMvcTest(PlanetController.class)
-public class PlanetController {
+public class PlanetControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +46,7 @@ public class PlanetController {
     }
 
     @Test
-    public void createPlanet_WithInvalidData_ReturnsRequest() throws  Exception {
+    public void createPlanet_WithInvalidData_ReturnsBadRequest() throws  Exception {
         Planet emptyPlanet = new Planet();
         Planet invalidPlanet = new Planet("", "", "");
 
@@ -58,13 +58,13 @@ public class PlanetController {
             )
             .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
 
-        //  mockMvc
-        //     .perform(
-        //         MockMvcRequestBuilders.post("/planets")
-        //             .content(objectMapper.writeValueAsString(invalidPlanet))
-        //             .contentType(MediaType.APPLICATION_JSON)
-        //     )
-        //     .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+         mockMvc
+            .perform(
+                MockMvcRequestBuilders.post("/planets")
+                    .content(objectMapper.writeValueAsString(invalidPlanet))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
 
     }
     
