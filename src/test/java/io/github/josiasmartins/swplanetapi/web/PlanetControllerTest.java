@@ -3,6 +3,8 @@ package io.github.josiasmartins.swplanetapi.web;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -79,6 +81,31 @@ public class PlanetControllerTest {
           MockMvcRequestBuilders.post("/planets").content(objectMapper.writeValueAsString(PLANET))
             .contentType(MediaType.APPLICATION_JSON))
           .andExpect(MockMvcResultMatchers.status().isConflict());
+    }
+
+    @Test
+    public void getPlanet_ByExistingId_ReturnsPlanet() throws Exception {
+        // TODO implement
+        when(planetService.getById(1L)).thenReturn(Optional.of(PLANET));
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get("/planets/1").content(objectMapper.writeValueAsString(PLANET))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$").value(PLANET));
+    }
+
+    @Test
+    public void getPlanet_ByUnexistingId_ReturnsNotFound() throws Exception {
+        // TODO implement
+        // when(planetService.getById(1L)).thenReturn(Optional.of(PLANET));
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get("/planets/1").content(objectMapper.writeValueAsString(PLANET))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
     
 }
