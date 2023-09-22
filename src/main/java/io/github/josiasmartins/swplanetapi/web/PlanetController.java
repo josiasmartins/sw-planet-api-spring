@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,10 +59,23 @@ public class PlanetController {
         return ResponseEntity.ok(planets);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Planet> delete(@PathVariable("id") long id) {
         planetService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Planet> patch(@PathVariable("id") Long id, @RequestBody Planet planet) {
+        return planetService.updatePlanet(id, planet)
+            .map(pl -> {
+                planetService.create(pl);
+                return ResponseEntity.ok(pl);
+            })
+            .orElseGet(() -> ResponseEntity.notFound().build());
+        // return ResponseEntity.noContent().build();
+    }
+
+
 
 }

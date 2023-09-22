@@ -11,8 +11,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.github.josiasmartins.swplanetapi.domain.Planet;
 import io.github.josiasmartins.swplanetapi.domain.PlanetService;
 
 import static io.github.josiasmartins.swplanetapi.common.PlanetConstants.PLANET;
@@ -40,6 +42,29 @@ public class PlanetController {
                 .content(objectMapper.writeValueAsString(PLANET)).contentType(MediaType.APPLICATION_JSON)) // transforma em string | json
             .andExpect(MockMvcResultMatchers.status().isCreated()) // status esperado
             .andExpect(MockMvcResultMatchers.jsonPath("$").value(PLANET));  // Faz a comparacao dos valores"$" raiz do json
+
+    }
+
+    @Test
+    public void createPlanet_WithInvalidData_ReturnsRequest() throws  Exception {
+        Planet emptyPlanet = new Planet();
+        Planet invalidPlanet = new Planet("", "", "");
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.post("/planets")
+                    .content(objectMapper.writeValueAsString(emptyPlanet))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+
+        //  mockMvc
+        //     .perform(
+        //         MockMvcRequestBuilders.post("/planets")
+        //             .content(objectMapper.writeValueAsString(invalidPlanet))
+        //             .contentType(MediaType.APPLICATION_JSON)
+        //     )
+        //     .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
 
     }
     
