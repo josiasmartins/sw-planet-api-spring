@@ -9,7 +9,7 @@ public class QueryBuilder {
         ExampleMatcher exampleMatcher = ExampleMatcher
             .matchingAll()
             .withIgnoreCase()
-            .withIncludeNullValues();
+            .withIgnoreNullValues();
         return Example.of(planet, exampleMatcher);
     }
 

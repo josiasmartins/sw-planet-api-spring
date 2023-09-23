@@ -81,27 +81,10 @@ public class PlanetRepositoryTest {
 
     @Test
     public void getPlanet_ByUnexistingId_ReturnsEmpty() {
-        // TODO implements
         Optional<Planet> planetOpt = planetRepository.findById(1L);
 
         assertThat(planetOpt).isEmpty();
     }
-
-    // @Sql(scripts = "/import_planets.sql")
-    // @Test
-    // public void listPlanets_ReturnsFilteredPlanets() {
-    //   Example<Planet> queryWithoutFilters = QueryBuilder.makeQuery(new Planet());
-    //   Example<Planet> queryWithFilters = QueryBuilder.makeQuery(new Planet(TATOOINE.getClimate(), TATOOINE.getTerrain()));
-  
-    //   List<Planet> responseWithoutFilters = planetRepository.findAll(queryWithoutFilters);
-    //   List<Planet> responseWithFilters = planetRepository.findAll(queryWithFilters);
-  
-    //   assertThat(responseWithoutFilters).isNotEmpty();
-    //   assertThat(responseWithoutFilters).hasSize(3);
-    //   assertThat(responseWithFilters).isNotEmpty();
-    //   assertThat(responseWithFilters).hasSize(1);
-    //   assertThat(responseWithFilters.get(0)).isEqualTo(TATOOINE);
-    // }
 
     @Sql(scripts = "/import_planets.sql")
     @Test
