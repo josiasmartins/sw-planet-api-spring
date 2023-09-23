@@ -11,6 +11,7 @@ public interface PlanetRepository extends CrudRepository<Planet, Long>, QueryByE
     
     Optional<Planet> findByName(String name); // query methods
 
+    @Override
     <S extends Planet> List<S> findAll(Example<S> example);
 
 }
