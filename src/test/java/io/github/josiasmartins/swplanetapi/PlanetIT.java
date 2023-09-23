@@ -8,6 +8,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,6 +18,7 @@ import io.github.josiasmartins.swplanetapi.domain.Planet;
 import static io.github.josiasmartins.swplanetapi.common.PlanetConstants.PLANET;
 
 @ActiveProfiles("it") // adiciona o arquivo application-it.properties
+@Sql(scripts = { "/remove_planets.sql" }, executionPhase = ExecutionPhase.AFTER_TEST_METHOD) // ExecutionPhase.AFTER_TEST_METHOD: depois que terminar de executar o metodo, ele aciona o sql
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // webEnvironment = WebEnvironment.RANDOM_PORT: adiciona uma porta aleatoria
 public class PlanetIT {
 
