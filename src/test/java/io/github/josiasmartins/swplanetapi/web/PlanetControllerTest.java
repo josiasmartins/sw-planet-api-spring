@@ -1,6 +1,7 @@
 package io.github.josiasmartins.swplanetapi.web;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
@@ -160,6 +162,26 @@ public class PlanetControllerTest {
                 MockMvcRequestBuilders.get("/planets"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
+    }
+
+    @Test
+    public void removePlanet_WithExistingId_ReturnsNoContent() throws Exception {
+        // when(planetService.deleteById(0L)).thenReturn(any());
+        // when(planetService.deleteById(null))
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/planets/1"))
+            .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+    }
+
+    @Test
+    public void removePlanet_WithUnexistingId_ReturnsNotFound() throws Exception {
+        final Long planetId = 1L;
+        doThrow(new EmptyResultDataAccessException(1)).when(planetService).deleteById(planetId); // doThrow: para metodos sem retorno (void)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/planets/" + planetId))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
     
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -110,6 +111,21 @@ public class PlanetRepositoryTest {
 
         assertThat(responseWithoutFilters).isEmpty();
         assertThat(responseWithoutFilters).hasSize(0);
+    }
+
+    @Test
+    public void removePlanet_WithExistingId_RemovesPlanetFromDatabase() {
+        Planet planet = testEntityManager.persistFlushFind(PLANET); // cria um planeta
+
+        planetRepository.deleteById(planet.getId()); // deleta o planeta criado
+
+        Planet removePlanet = testEntityManager.find(Planet.class, planet.getId()); // verifica se existe no banco
+        assertThat(removePlanet).isNull();
+    }
+
+    @Test
+    public void removePlanet_WithUnexistingId_ThrowsException() {
+        assertThatThrownBy(() -> planetRepository.deleteById(1L)).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
 }
