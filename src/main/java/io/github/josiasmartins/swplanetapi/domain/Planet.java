@@ -4,6 +4,8 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
+import io.github.josiasmartins.swplanetapi.jacoco.ExcludedFromJacocoGeneratedReport;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -82,6 +84,7 @@ public class Planet {
         return EqualsBuilder.reflectionEquals(obj, this);
     }
 
+    @ExcludedFromJacocoGeneratedReport
     @Override
     public String toString() {
         return "Planet [id=" + id + ", name=" + name + ", climate=" + climate + ", terrain=" + terrain + "]";
