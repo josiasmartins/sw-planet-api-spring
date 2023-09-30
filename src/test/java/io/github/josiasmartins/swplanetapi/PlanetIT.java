@@ -16,6 +16,8 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import io.github.josiasmartins.swplanetapi.domain.Planet;
 
 import static io.github.josiasmartins.swplanetapi.common.PlanetConstants.PLANET;
@@ -62,7 +64,7 @@ public class PlanetIT {
 
    @Test
    public void listPlanets_ReturnsAllPlanets() {
-        ResponseEntity<Planet[]> sut = restTemplate.getForEntity("/planents", Planet[].class);
+        ResponseEntity<Planet[]> sut = restTemplate.getForEntity("/planets", Planet[].class);
 
         assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(sut.getBody()).hasSize(3);
@@ -71,25 +73,25 @@ public class PlanetIT {
 
    @Test
    public void listPlanets_ByClimate_ReturnsPlanets() {
-        ResponseEntity<Planet[]> sut = restTemplate.getForEntity("/planents?climate=" + TATOOINE.getClimate(), Planet[].class);
+        ResponseEntity<Planet[]> sut = restTemplate.getForEntity("/planets?climate=" + ALDERAAN.getClimate(), Planet[].class);
 
         assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(sut.getBody()).hasSize(1);
-        assertThat(sut.getBody()[0]).isEqualTo(TATOOINE);
+        assertThat(sut.getBody()[0]).isEqualTo(ALDERAAN);
    }
 
    @Test
    public void listPlanets_ByTerrain_ReturnsPlanets() {
-        ResponseEntity<Planet[]> sut = restTemplate.getForEntity("/planents?terrain=" + TATOOINE.getTerrain(), Planet[].class);
+        ResponseEntity<Planet[]> sut = restTemplate.getForEntity("/planets?terrain=" + ALDERAAN.getTerrain(), Planet[].class);
 
         assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(sut.getBody()).hasSize(1);
-        assertThat(sut.getBody()[0]).isEqualTo(TATOOINE);
+        assertThat(sut.getBody()[0]).isEqualTo(ALDERAAN);
    }
 
    @Test
    public void removePlanet_ReturnsNoContent() {
-    ResponseEntity<Void> sut = restTemplate.exchange("/planents/" + TATOOINE.getId(), HttpMethod.DELETE, null, Void.class); // excahange: metodo generico
+    ResponseEntity<Void> sut = restTemplate.exchange("/planets/" + TATOOINE.getId(), HttpMethod.DELETE, null, Void.class); // excahange: metodo generico
 
     assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
    }
